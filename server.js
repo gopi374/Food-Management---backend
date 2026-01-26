@@ -36,26 +36,21 @@ initializeSocket(httpServer);
 // Middleware
 app.use(helmet());
 
-const rawOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173';
-const corsOrigins = [
-    rawOrigin.replace(/\/+$/, ''),           // without slash
-    rawOrigin.replace(/\/+$/, '') + '/'      // with slash
-];
-
-console.log('CORS Origins allowed:', corsOrigins);
+const allowedPattern = /food-share1\.netlify\.app\/?$/;
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        if (corsOrigins.indexOf(origin) !== -1 || origin.startsWith('http://localhost')) {
+        // Reflect origin if it matches pattern or is localhost
+        if (!origin || origin.startsWith('http://localhost') || allowedPattern.test(origin)) {
             callback(null, true);
         } else {
-            console.log('Blocked by CORS:', origin);
+            console.log('CORS blocked origin:', origin);
             callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-goog-resumable']
 }));
 app.use(express.json());
 
