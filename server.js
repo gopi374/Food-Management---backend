@@ -36,12 +36,16 @@ initializeSocket(httpServer);
 // Middleware
 app.use(helmet());
 
-const allowedPattern = /food-share1\.netlify\.app\/?$/;
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://food-share1.netlify.app',
+  process.env.CORS_ORIGIN
+].filter(Boolean);
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Reflect origin if it matches pattern or is localhost
-        if (!origin || origin.startsWith('http://localhost') || allowedPattern.test(origin)) {
+        if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
             console.log('CORS blocked origin:', origin);
