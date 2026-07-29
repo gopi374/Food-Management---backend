@@ -64,4 +64,4 @@ async function listBuckets() {
 
 listBuckets();
 
-setCors();
+// setCors();
