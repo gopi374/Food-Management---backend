@@ -5,9 +5,18 @@ import User from '../models/User.js';
 let io;
 
 const initializeSocket = (server) => {
+    const allowedOrigins = [
+        'http://localhost:5173',
+        'http://localhost:3000',
+        'https://food-share1.netlify.app',
+        ...(process.env.CORS_ORIGIN
+            ? process.env.CORS_ORIGIN.split(',').map((origin) => origin.trim())
+            : [])
+    ].filter(Boolean);
+
     io = new Server(server, {
         cors: {
-            origin: process.env.CORS_ORIGIN,
+            origin: allowedOrigins,
             methods: ['GET', 'POST'],
             credentials: true,
         },
