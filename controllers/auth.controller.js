@@ -3,7 +3,7 @@ import { AppError } from '../middleware/error.middleware.js';
 import { admin } from '../config/firebase.js';
 
 /**
- * Register a new user
+ * Register new user 
  * POST /api/auth/register
  */
 export const register = async (req, res, next) => {
