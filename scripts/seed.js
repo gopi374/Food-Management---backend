@@ -61,8 +61,8 @@ const seedDatabase = async () => {
         }
 
         // Remove from MongoDB
-        const deletedUsers = await User.deleteMany({ email: { $in: testEmails } });
-        console.log(`Deleted ${deletedUsers.deletedCount} users from MongoDB`);
+        // const deletedUsers = await User.deleteMany({ email: { $in: testEmails } });
+        // console.log(`Deleted ${deletedUsers.deletedCount} users from MongoDB`);
 
         // Create Donor
         console.log('Creating Test Donor...');
