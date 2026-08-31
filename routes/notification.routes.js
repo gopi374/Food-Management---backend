@@ -10,6 +10,13 @@ router.use(authenticate);
 router.get('/', async (req, res, next) => {
     try {
         const notifications = await Notification.find({ userId: req.user._id })
+            .populate({
+                path: 'relatedDonationId',
+                populate: {
+                    path: 'donor recipient',
+                    select: 'name organization phone address location'
+                }
+            })
             .sort('-createdAt')
             .limit(50);
 
@@ -29,7 +36,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // Mark notification as read
-router.put('/:id/read', async (req, res, next) => {
+router.patch('/:id/read', async (req, res, next) => {
     try {
         const notification = await Notification.findOneAndUpdate(
             { _id: req.params.id, userId: req.user._id },

@@ -48,7 +48,14 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (
+        !origin || 
+        allowedOrigins.includes(origin) ||
+        origin.startsWith('exp://') ||
+        origin.includes('localhost') ||
+        origin.includes('127.0.0.1') ||
+        origin.includes('192.168.')
+      ) {
         callback(null, true);
       } else {
         console.log('CORS blocked origin:', origin);

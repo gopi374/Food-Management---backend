@@ -80,10 +80,13 @@ export const createDonation = async (req, res, next) => {
  */
 export const getDonations = async (req, res, next) => {
     try {
-        const { status, category, lat, lng, radius = 10 } = req.query;
+        const { status, category, lat, lng, radius = 10, recipientOnly } = req.query;
         const query = {};
 
-        if (status) {
+        if (recipientOnly === 'true') {
+            query.recipient = req.user._id;
+            query.status = { $in: ['accepted', 'completed'] };
+        } else if (status) {
             query.status = status;
             // If status is accepted or completed, ensure we only return what belongs to the user
             if ((status === 'accepted' || status === 'completed') && req.user.userType === 'recipient') {
